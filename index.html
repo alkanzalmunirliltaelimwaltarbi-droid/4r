@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>حاسبة الرخام والغرانيت</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f766e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="الرخام والغرانيت">
+<style>
+:root{--p:#0f766e;--p2:#115e59;--bg:#f3f6f8;--card:#fff;--txt:#17202a;--muted:#64748b;--danger:#b91c1c;--line:#dbe3e8}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:var(--txt)}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px}
+.app{display:flex;min-height:100vh}.side{width:250px;background:#123b3a;color:white;padding:18px;position:sticky;top:0;height:100vh}.brand{font-size:20px;font-weight:700;margin-bottom:20px}.nav button{display:block;width:100%;text-align:right;background:transparent;color:#e5f5f4;margin:5px 0}.nav button.active,.nav button:hover{background:#1c5b58}
+.main{flex:1;padding:20px;max-width:1500px;margin:auto}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:18px}.clock{color:var(--muted);font-size:14px}.page{display:none}.page.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 2px 8px #00000008}.stat{font-size:28px;font-weight:700;margin-top:8px}.muted{color:var(--muted)}
+.form{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:15px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.field label{display:block;font-weight:700;font-size:13px;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:10px;background:white}.field textarea{min-height:80px;resize:vertical}.span2{grid-column:span 2}.span4{grid-column:1/-1}
+.btn{background:var(--p);color:#fff}.btn:hover{background:var(--p2)}.secondary{background:#e2e8f0;color:#17202a}.danger{background:var(--danger);color:white}.success{background:#15803d;color:white}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+table{width:100%;border-collapse:collapse;background:white}th,td{border:1px solid var(--line);padding:9px;text-align:center}th{background:#e6f1f0}td input{width:100%;border:1px solid #ddd;padding:7px;border-radius:6px}
+.tablewrap{overflow:auto;border-radius:10px}.totalbar{display:flex;gap:20px;flex-wrap:wrap;background:#eef7f6;padding:14px;border-radius:10px;margin-top:12px;font-weight:700}
+.search{max-width:450px;margin-bottom:12px}.search input{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px}
+.logo{width:75px;height:75px;object-fit:contain;border:1px dashed #aaa;border-radius:10px}.empty{text-align:center;padding:30px;color:var(--muted)}
+@media(max-width:900px){.side{width:190px}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.app{display:block}.side{position:static;width:100%;height:auto}.nav{display:grid;grid-template-columns:repeat(3,1fr)}.nav button{font-size:12px}.main{padding:10px}.grid{grid-template-columns:1fr}.span2,.span4{grid-column:auto}}
+@media print{body{background:white}.side,.top,.no-print{display:none!important}.main{padding:0}.page{display:none!important}.page.printing{display:block!important}.print-card{border:0!important;box-shadow:none!important}}
+.two-copy{display:grid;grid-template-columns:1fr 1fr;gap:2mm;width:100%;direction:rtl}
+.copy{border:1px solid #333;padding:4mm;min-width:0;height:185mm;overflow:hidden;font-size:10px}
+.copy h2{font-size:15px;margin:3px 0}.copy h3{font-size:12px;margin:3px 0}.copy p{margin:4px 0;line-height:1.35}.copy table{font-size:8.5px;min-width:0}.copy th,.copy td{padding:3px}.copy .totalbar{padding:5px;gap:7px;margin-top:5px;font-size:9px}
+@page{size:A4 landscape;margin:4mm}
+@media print{.two-copy{grid-template-columns:1fr 1fr;gap:2mm;width:100%;height:188mm}.copy{height:188mm;break-inside:avoid;page-break-inside:avoid}}
+</style>
+
+<style>
+:root{--p:#0f766e;--p2:#115e59;--bg:#f5f7f9;--card:#fff;--txt:#17202a;--muted:#64748b;--line:#e2e8f0;--nav:#ffffff}
+html,body{width:100%;min-height:100%;background:var(--bg);-webkit-tap-highlight-color:transparent}
+body{font-family:Tahoma,Arial,sans-serif;overscroll-behavior-y:none}
+.app{display:block;min-height:100vh}.side{display:none}.main{max-width:none;width:100%;padding:0 0 82px;margin:0}
+.top{position:sticky;top:0;z-index:20;background:rgba(245,247,249,.94);backdrop-filter:blur(12px);padding:12px 14px;margin:0;border-bottom:1px solid #e8edf1}
+.top h2{font-size:19px;margin:0 0 3px}.clock{font-size:11px}
+.top .btn{border-radius:20px;padding:9px 13px}
+.page{padding:12px}.cards{grid-template-columns:repeat(2,1fr);gap:10px}.card{border:0;border-radius:16px;padding:14px;box-shadow:0 3px 12px #0000000a}.stat{font-size:23px}
+.form{border:0;border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px #00000008}.grid{grid-template-columns:1fr 1fr;gap:10px}.span2,.span4{grid-column:1/-1}
+.field label{font-size:12px;color:#475569}.field input,.field select,.field textarea{font-size:15px;padding:11px;border-radius:10px;min-height:43px}
+.field textarea{min-height:85px}.actions{gap:7px}.actions button{min-height:42px}.btn,.secondary,.danger,.success{border-radius:11px}
+.tablewrap{border-radius:10px}table{font-size:12px;min-width:720px}th,td{padding:7px}
+.search{max-width:none}.search input{font-size:15px;border-radius:12px;padding:12px}
+.bottom-nav{position:fixed;display:flex;z-index:100;left:0;right:0;bottom:0;height:68px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-top:1px solid #e2e8f0;box-shadow:0 -4px 18px #00000010;padding:5px 5px calc(5px + env(safe-area-inset-bottom))}
+.bottom-nav button{flex:1;background:transparent;color:#64748b;padding:5px 2px;border-radius:12px;font-size:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.bottom-nav button.active{color:var(--p);background:#e7f5f3;font-weight:700}.bottom-nav .ico{font-size:20px;line-height:20px}
+.fab{position:fixed;right:16px;bottom:78px;z-index:50;width:54px;height:54px;border-radius:50%;padding:0;font-size:25px;box-shadow:0 7px 20px #0003}
+#home .form:first-of-type{margin-top:12px}
+@media(min-width:651px){body{max-width:520px;margin:auto;background:#dfe7ea}.app{background:var(--bg);min-height:100vh}.bottom-nav{left:50%;right:auto;width:520px;transform:translateX(-50%)}.fab{right:calc(50% - 245px)}}
+@media(max-width:390px){.grid{grid-template-columns:1fr}.span2,.span4{grid-column:auto}.cards{gap:8px}.card{padding:11px}}
+@media print{.bottom-nav,.fab{display:none!important}}
+</style>
+
+<style id="print-fix">
+@page{size:A4 landscape;margin:3mm}
+@media print{
+ html,body{width:297mm!important;height:210mm!important;margin:0!important;padding:0!important;background:#fff!important}
+ body{font-family:Tahoma,Arial,sans-serif!important}
+ .side,.top,.bottom-nav,.fab,.no-print{display:none!important}
+ .main{display:block!important;width:291mm!important;max-width:291mm!important;margin:0!important;padding:0!important}
+ .page{display:none!important}
+ .page.printing{display:block!important;width:291mm!important;max-width:291mm!important;padding:0!important;margin:0!important}
+ #printArea{display:block!important;width:291mm!important;max-width:291mm!important;margin:0!important;padding:0!important}
+ .print-sheet{display:grid!important;grid-template-columns:144mm 144mm!important;gap:3mm!important;width:291mm!important;height:204mm!important;direction:rtl!important;box-sizing:border-box!important}
+ .print-copy{width:144mm!important;height:204mm!important;box-sizing:border-box!important;border:1px solid #222!important;padding:3mm!important;overflow:hidden!important;font-size:9.5pt!important;background:#fff!important}
+ .print-copy *{box-sizing:border-box!important;max-width:100%!important}
+ .print-copy table{display:table!important;width:100%!important;min-width:0!important;max-width:100%!important;border-collapse:collapse!important;table-layout:fixed!important;font-size:8pt!important}
+ .print-copy th,.print-copy td{padding:1.5mm!important;white-space:normal!important;word-break:break-word!important;overflow-wrap:anywhere!important}
+ .print-copy .totalbar{width:100%!important;display:flex!important;justify-content:space-between!important}
+ .print-copy h2{font-size:13pt!important;margin:1mm 0!important}
+ .print-copy h3{font-size:10pt!important;margin:1mm 0!important}
+ .print-copy p{margin:1.5mm 0!important;line-height:1.25!important}
+}
+</style>
+<style id="print-fix-final">@page{size:A4 landscape;margin:3mm}@media print{html,body{width:297mm!important;height:210mm!important;margin:0!important;padding:0!important;background:#fff!important}.side,.top,.bottom-nav,.fab,.no-print{display:none!important}.main{width:291mm!important;max-width:291mm!important;margin:0!important;padding:0!important}.page{display:none!important}.page.printing{display:block!important;width:291mm!important;padding:0!important;margin:0!important}#printArea{width:291mm!important;margin:0!important;padding:0!important}.print-sheet{display:grid!important;grid-template-columns:144mm 144mm!important;gap:3mm!important;width:291mm!important;height:204mm!important;direction:rtl!important}.print-copy{width:144mm!important;height:204mm!important;box-sizing:border-box!important;border:1px solid #222!important;padding:3mm!important;overflow:hidden!important;font-size:9.5pt!important}.print-copy table{display:table!important;width:100%!important;min-width:0!important;max-width:100%!important;border-collapse:collapse!important;table-layout:fixed!important;font-size:8pt!important}.print-copy th,.print-copy td{padding:1.5mm!important;white-space:normal!important;overflow-wrap:anywhere!important;word-break:break-word!important}}</style></head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand">🪨 حاسبة الرخام والغرانيت<div style="font-size:11px;margin-top:5px;color:#bfe5e2">الإصدار النهائي المعتمد 2.3</div></div>
+  <div id="brandName" class="muted" style="color:#bfe5e2;margin-bottom:15px"></div>
+  <nav class="nav">
+    <button data-page="home" class="active">🏠 الرئيسية</button>
+    <button data-page="new">📏 طلب جديد</button>
+    <button data-page="archive">🗂️ الأرشيف</button>
+    <button data-page="reports">🖨️ التقارير</button>
+    <button data-page="rates">💱 أسعار الصرف</button>
+    <button data-page="settings">⚙️ الإعدادات</button>
+  </nav>
+</aside>
+<main class="main">
+<div class="top"><div><h2 id="pageTitle">الرئيسية</h2><div><div class="clock" id="clock"></div><div id="netStatus" style="font-size:11px;color:#15803d;margin-top:3px">● يعمل محلياً</div></div></div><button class="btn no-print" onclick="newOrder()">+ طلب جديد</button></div>
+
+<section id="home" class="page active">
+<div class="cards">
+<div class="card">طلبات اليوم<div class="stat" id="sToday">0</div></div>
+<div class="card">إجمالي الزبائن<div class="stat" id="sCustomers">0</div></div>
+<div class="card">طلبات مكتملة<div class="stat" id="sDone">0</div></div>
+<div class="card">قيد التنفيذ<div class="stat" id="sPending">0</div></div>
+<div class="card">إجمالي المبيعات $<div class="stat" id="sSales">0</div></div>
+<div class="card">إجمالي الديون $<div class="stat" id="sDebt">0</div></div>
+</div>
+<div class="form" style="margin-top:15px"><h3>آخر الطلبات</h3><div id="recent"></div></div>
+</section>
+
+<section id="new" class="page">
+<div class="form">
+<h3 id="formTitle">بيانات الطلب</h3>
+<input type="hidden" id="orderId">
+<div class="grid">
+<div class="field"><label>اسم الزبون *</label><input id="customer" placeholder="مثال: محمد أحمد"></div>
+<div class="field"><label>نوع الرخام/الغرانيت *</label><input id="material" placeholder="إدخال يدوي"></div>
+<div class="field"><label>السماكة (سم)</label><input id="thickness" type="number" step="0.01"></div>
+<div class="field"><label>حالة الطلب</label><select id="status"><option>جديد</option><option>قيد القص</option><option>جاهز</option><option>تم التسليم</option><option>مكتمل</option></select></div>
+<div class="field"><label>سعر المتر المربع ($)</label><input id="priceM2" type="number" step="0.01"></div>
+<div class="field"><label>سعر المتر الجاري ($)</label><input id="priceRun" type="number" step="0.01"></div>
+<div class="field"><label>سعر الصرف (ل.س لكل $)</label><input id="rate" type="number" step="0.01"></div>
+<div class="field"><label>تاريخ الطلب</label><input id="date" type="date"></div>
+<div class="field span4"><label>ملاحظات القص والتفصيل</label><textarea id="notes"></textarea></div>
+</div>
+</div>
+<div class="form">
+<h3>القياسات</h3>
+<div class="tablewrap"><table><thead><tr><th>#</th><th>الطول سم</th><th>العرض سم</th><th>العدد</th><th>م²</th><th>متر جاري</th><th>ملاحظات</th><th class="no-print">حذف</th></tr></thead><tbody id="measureBody"></tbody></table></div>
+<div class="actions no-print"><button class="btn" onclick="addMeasure()">+ إضافة قياس جديد</button></div>
+<div class="totalbar"><span>المساحة: <b id="totM2">0</b> م²</span><span>المتر الجاري: <b id="totRun">0</b> م جر</span></div>
+</div>
+<div class="form">
+<h3>الحسابات والدفع</h3>
+<div class="grid">
+<div class="field"><label>الإجمالي بالدولار</label><input id="totalUSD" readonly></div>
+<div class="field"><label>الإجمالي بالليرة</label><input id="totalSYP" readonly></div>
+<div class="field"><label>المبلغ المطلوب ($)</label><input id="dueUSD" type="number" step="0.01"></div>
+<div class="field"><label>المبلغ المسدد الحالي</label><input id="paidAmount" type="number" step="0.01"></div>
+<div class="field"><label>عملة التسديد</label><select id="paidCurrency"><option value="USD">دولار أمريكي</option><option value="SYP">ليرة سورية</option></select></div>
+<div class="field span4"><label>سجل الدفعات</label><div id="paymentLedger"></div><div class="actions no-print"><button type="button" class="secondary" onclick="addPayment()">+ إضافة دفعة إلى السجل</button></div></div>
+<div class="field"><label>طريقة الدفع</label><select id="paymentMethod"><option>نقداً</option><option>بالدين</option><option>نقداً + دين</option></select></div>
+<div class="field"><label>المتبقي بالدولار</label><input id="remainUSD" readonly></div>
+<div class="field"><label>المتبقي بالليرة</label><input id="remainSYP" readonly></div>
+</div>
+<div class="actions no-print">
+<button class="success" onclick="saveOrder()">💾 حفظ الطلب</button>
+<button class="secondary" onclick="printCurrent('measure')">🖨️ طباعة القياسات</button>
+<button class="secondary" onclick="printCurrent('finance')">🖨️ طباعة الحسابات</button>
+<button class="secondary" onclick="resetForm()">إلغاء</button>
+</div>
+</div>
+</section>
+
+<section id="archive" class="page">
+<div class="search"><input id="archiveSearch" oninput="renderArchive()" placeholder="ابحث باسم الزبون أو رقم الطلب أو نوع الرخام..."></div>
+<div class="form"><div class="tablewrap"><table><thead><tr><th>رقم</th><th>التاريخ</th><th>الزبون</th><th>المادة</th><th>م²</th><th>م جر</th><th>الإجمالي $</th><th>المدفوع</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="archiveBody"></tbody></table></div></div>
+</section>
+
+<section id="reports" class="page">
+<div class="form no-print"><h3>طباعة التقارير</h3><p class="muted">اختر طلباً ثم اطبع تقرير القياسات أو الحسابات. كل تقرير يُطبع **نسختين متطابقتين جنباً إلى جنب** في صفحة A4 أفقية، مع هوامش ضيقة.</p><select id="reportOrder" style="padding:10px;width:100%"></select><div class="actions"><button class="btn" onclick="printSelected('measure')">طباعة تقرير القياسات</button><button class="btn" onclick="printSelected('finance')">طباعة تقرير الحسابات</button></div></div>
+<div id="printArea"></div>
+</section>
+
+<section id="rates" class="page">
+<div class="form"><h3>سعر الصرف اليومي</h3><div class="grid"><div class="field"><label>التاريخ</label><input id="rateDate" type="date"></div><div class="field"><label>الدولار مقابل الليرة السورية</label><input id="rateValue" type="number" step="0.01"></div></div><div class="actions"><button class="btn" onclick="saveRate()">حفظ سعر اليوم</button></div></div>
+<div class="form"><div class="tablewrap"><table><thead><tr><th>التاريخ</th><th>سعر الصرف</th><th>إجراء</th></tr></thead><tbody id="ratesBody"></tbody></table></div></div>
+</section>
+
+<section id="settings" class="page">
+<div class="form"><h3>إعدادات المعمل</h3><div class="grid">
+<div class="field span2"><label>اسم المعمل</label><input id="shopName"></div>
+<div class="field"><label>الشعار</label><input id="logoInput" type="file" accept="image/*"></div>
+<div class="field"><label>معاينة الشعار</label><img id="logoPreview" class="logo"></div>
+</div><div class="actions"><button class="btn" onclick="saveSettings()">حفظ الإعدادات</button></div></div>
+<div class="form"><h3>النسخ الاحتياطي</h3><div class="actions"><button class="btn" onclick="exportXLSX()">📊 تصدير Excel حقيقي</button><button class="btn" onclick="exportJSON()">💾 تصدير نسخة احتياطية</button><label class="secondary" style="padding:10px 14px;border-radius:9px">استيراد نسخة <input id="importJSON" type="file" accept=".json" hidden></label></div></div>
+<div class="form"><h3>منطقة الخطر</h3><p>حذف جميع الطلبات والعملاء وأسعار الصرف نهائياً.</p><button class="danger" onclick="clearAll()">حذف جميع البيانات</button></div>
+</section>
+</main></div>
+
+<script>
+const KEY='marble_app_v2';
+const DB_VERSION=2;
+const DEFAULT_DB={version:DB_VERSION,orders:[],rates:{},settings:{shopName:'معمل الرخام والغرانيت',logo:''}};
+let db=loadLocalDB();
+let measures=[];
+let currentPayments=[];
+const $=id=>document.getElementById(id);
+const num=x=>{const n=parseFloat(normalizeNum(x));return Number.isFinite(n)?n:0};
+const fmt=x=>num(x).toLocaleString('ar-SY',{maximumFractionDigits:2});
+function normalizeNum(v){return String(v??'').replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/٫/g,'.').replace(/٬/g,'').replace(/[،,]/g,'.').replace(/\s+/g,'').trim()}
+function validMeasureNumber(v){const n=num(v);return Number.isFinite(n)&&n>0?n:0}
+function measureValues(m){const L=validMeasureNumber(m?.length),W=validMeasureNumber(m?.width),Q=validMeasureNumber(m?.qty||1);return {m2:L*W/10000*Q,run:2*(L+W)/100*Q}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function clone(x){return JSON.parse(JSON.stringify(x))}
+function defaultDB(){return clone(DEFAULT_DB)}
+function normalizeDB(raw){
+  const d=(raw&&typeof raw==='object')?raw:{};
+  const out={version:DB_VERSION,orders:Array.isArray(d.orders)?d.orders:[],rates:d.rates&&typeof d.rates==='object'?d.rates:{},settings:{...DEFAULT_DB.settings,...(d.settings&&typeof d.settings==='object'?d.settings:{})}};
+  out.orders=out.orders.filter(Boolean).map((o,i)=>({
+    id:String(o.id||String(i+1).padStart(4,'0')),date:o.date||today(),created:Number(o.created)||Date.now(),
+    customer:String(o.customer||''),material:String(o.material||''),thickness:num(o.thickness),status:String(o.status||'جديد'),
+    priceM2:num(o.priceM2),priceRun:num(o.priceRun),rate:num(o.rate),totalUSD:num(o.totalUSD),totalSYP:num(o.totalSYP),
+    dueUSD:num(o.dueUSD),paidAmount:num(o.paidAmount),paidCurrency:o.paidCurrency==='SYP'?'SYP':'USD',paidUSD:num(o.paidUSD),
+    remainUSD:Math.max(0,num(o.remainUSD)),remainSYP:Math.max(0,num(o.remainSYP)),paymentMethod:String(o.paymentMethod||'نقداً'),
+    payments:Array.isArray(o.payments)?o.payments.map(p=>({date:p.date||today(),amount:num(p.amount),currency:p.currency==='SYP'?'SYP':'USD',rate:num(p.rate)})).filter(p=>p.amount>0):[],
+    notes:String(o.notes||''),measures:Array.isArray(o.measures)?o.measures.map(m=>({length:normalizeNum(m.length),width:normalizeNum(m.width),qty:normalizeNum(m.qty||1),note:String(m.note||'')})):[ ]
+  }));
+  return out;
+}
+function loadLocalDB(){try{const raw=localStorage.getItem(KEY)||localStorage.getItem('marble_app_v1');return normalizeDB(raw?JSON.parse(raw):defaultDB())}catch{return defaultDB()}}
+function persistLocal(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}catch(e){console.error(e);return false}}
+let idbPromise=null;
+function openIDB(){if(!('indexedDB' in window))return Promise.resolve(null);if(idbPromise)return idbPromise;idbPromise=new Promise(resolve=>{const r=indexedDB.open('MarbleGraniteDB',2);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('app'))r.result.createObjectStore('app')};r.onsuccess=()=>resolve(r.result);r.onerror=()=>resolve(null)});return idbPromise}
+async function readIDB(){try{const d=await openIDB();if(!d)return null;return await new Promise(res=>{const r=d.transaction('app','readonly').objectStore('app').get('state');r.onsuccess=()=>res(r.result||null);r.onerror=()=>res(null)})}catch{return null}}
+async function writeIDB(){try{const d=await openIDB();if(!d)return;await new Promise((res,rej)=>{const r=d.transaction('app','readwrite').objectStore('app').put(db,'state');r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}catch(e){console.warn('IndexedDB',e)}}
+async function loadPersistentDB(){const remote=await readIDB();if(remote&&Array.isArray(remote.orders)){db=normalizeDB(remote);persistLocal() } else {await writeIDB()}}
+function saveDB(){db=normalizeDB(db);persistLocal();void writeIDB();updateDashboard();renderArchive();renderReports();renderRates()}
+function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function nowText(){return new Date().toLocaleString('ar-SY')}
+function updateClock(){$('clock').textContent=nowText()} setInterval(updateClock,1000);updateClock();
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+function showPage(p){const target=$(p);if(!target)return;document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));target.classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));const nav=document.querySelector(`button[data-page="${p}"]`);if(nav)$('pageTitle').textContent=nav.textContent.replace(/^\S+\s*/,'');if(p==='archive')renderArchive();if(p==='reports')renderReports();if(p==='rates')renderRates();if(p==='settings')loadSettings()}
+function updateDashboard(){const t=today(),o=db.orders||[];$('sToday').textContent=o.filter(x=>x.date===t).length;$('sCustomers').textContent=new Set(o.map(x=>x.customer.trim()).filter(Boolean)).size;$('sDone').textContent=o.filter(x=>x.status==='مكتمل'||x.status==='تم التسليم').length;$('sPending').textContent=o.filter(x=>!['مكتمل','تم التسليم'].includes(x.status)).length;$('sSales').textContent=fmt(o.reduce((s,x)=>s+num(x.totalUSD),0));$('sDebt').textContent=fmt(o.reduce((s,x)=>s+num(x.remainUSD),0));$('recent').innerHTML=o.slice().sort((a,b)=>b.created-a.created).slice(0,8).map(x=>`<div style="padding:10px;border-bottom:1px solid #eee"><b>#${esc(x.id)}</b> — ${esc(x.customer)} — ${fmt(x.totalUSD)} $ — ${esc(x.status)}</div>`).join('')||'<div class="empty">لا توجد طلبات</div>'}
+function nextOrderId(){let max=0;db.orders.forEach(x=>{const n=parseInt(String(x.id).replace(/\D/g,''),10);if(Number.isFinite(n))max=Math.max(max,n)});return String(max+1).padStart(4,'0')}
+function newOrder(){resetForm();showPage('new')}
+function resetForm(){$('orderId').value='';$('customer').value='';$('material').value='';$('thickness').value='';$('status').value='جديد';$('priceM2').value='';$('priceRun').value='';$('rate').value=db.rates[today()]||'';$('date').value=today();$('notes').value='';$('dueUSD').value='';$('paidAmount').value='';$('paidCurrency').value='USD';$('paymentMethod').value='نقداً';$('formTitle').textContent='بيانات الطلب';measures=[];currentPayments=[];window.currentPayments=currentPayments;addMeasure();renderPayments();calc()}
+function addMeasure(m={length:'',width:'',qty:1,note:''}){measures.push({length:normalizeNum(m.length),width:normalizeNum(m.width),qty:normalizeNum(m.qty||1),note:String(m.note||'')});renderMeasures();calc()}
+function renderMeasures(){const body=$('measureBody');if(!body)return;body.innerHTML=measures.map((m,i)=>{const v=measureValues(m);return `<tr><td>${i+1}</td><td><input inputmode="decimal" type="text" value="${esc(m.length)}" placeholder="سم" oninput="measures[${i}].length=normalizeNum(this.value);calc()"></td><td><input inputmode="decimal" type="text" value="${esc(m.width)}" placeholder="سم" oninput="measures[${i}].width=normalizeNum(this.value);calc()"></td><td><input inputmode="numeric" type="text" value="${esc(m.qty||1)}" oninput="measures[${i}].qty=normalizeNum(this.value);calc()"></td><td class="measure-m2">${fmt(v.m2)}</td><td class="measure-run">${fmt(v.run)}</td><td><input type="text" value="${esc(m.note)}" placeholder="ملاحظات القص والتفصيل" oninput="measures[${i}].note=this.value"></td><td class="no-print"><button type="button" class="danger" onclick="measures.splice(${i},1);renderMeasures();calc()">حذف</button></td></tr>`}).join('')}
+function paymentTotalUSD(){return currentPayments.reduce((sum,p)=>sum+(p.currency==='USD'?num(p.amount):(num(p.rate)>0?num(p.amount)/num(p.rate):0)),0)}
+function calc(){let m2=0,run=0;measures.forEach(m=>{const v=measureValues(m);m2+=v.m2;run+=v.run});if($('totM2'))$('totM2').textContent=fmt(m2);if($('totRun'))$('totRun').textContent=fmt(run);const total=m2*num($('priceM2')?.value)+run*num($('priceRun')?.value),rate=num($('rate')?.value),dueRaw=num($('dueUSD')?.value);if($('totalUSD'))$('totalUSD').value=total.toFixed(2);if($('totalSYP'))$('totalSYP').value=(total*rate).toFixed(0);const due=dueRaw>0?dueRaw:total,paidUSD=paymentTotalUSD(),remain=Math.max(0,due-paidUSD);if($('remainUSD'))$('remainUSD').value=remain.toFixed(2);if($('remainSYP'))$('remainSYP').value=(remain*rate).toFixed(0);if($('measureBody'))[...$('measureBody').querySelectorAll('tr')].forEach((tr,i)=>{const v=measureValues(measures[i]||{});if(tr.children[4])tr.children[4].textContent=fmt(v.m2);if(tr.children[5])tr.children[5].textContent=fmt(v.run)})}
+function renderPayments(){const el=$('paymentLedger');if(!el)return;window.currentPayments=currentPayments;el.innerHTML=currentPayments.length?`<div class="tablewrap"><table><thead><tr><th>#</th><th>التاريخ</th><th>المبلغ</th><th>العملة</th><th>السعر</th><th>ما يعادل $</th><th>حذف</th></tr></thead><tbody>${currentPayments.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.date)}</td><td>${fmt(p.amount)}</td><td>${p.currency==='USD'?'دولار':'ليرة سورية'}</td><td>${fmt(p.rate)}</td><td>${fmt(p.currency==='USD'?p.amount:(p.rate?p.amount/p.rate:0))}</td><td><button type="button" class="danger" onclick="currentPayments.splice(${i},1);renderPayments();calc()">حذف</button></td></tr>`).join('')}</tbody></table></div>`:'<span class="muted">لا توجد دفعات مسجلة بعد.</span>'}
+function addPayment(){const amount=num($('paidAmount').value),currency=$('paidCurrency').value,rate=num($('rate').value);if(amount<=0)return alert('أدخل مبلغ دفعة صحيحاً.');if(currency==='SYP'&&rate<=0)return alert('أدخل سعر الصرف أولاً.');currentPayments.push({date:$('date').value||today(),amount,currency,rate});$('paidAmount').value='';renderPayments();calc()}
+function saveOrder(){
+ const customer=$('customer').value.trim(),material=$('material').value.trim();if(!customer||!material){alert('يرجى إدخال اسم الزبون ونوع الرخام/الغرانيت.');return}
+ const valid=measures.some(m=>measureValues(m).m2>0);if(!valid){alert('أدخل الطول والعرض والعدد بشكل صحيح في قياس واحد على الأقل.');return}
+ const rate=num($('rate').value);if(rate<=0){alert('أدخل سعر صرف صحيح.');return}
+ const m2=measures.reduce((s,m)=>s+measureValues(m).m2,0),run=measures.reduce((s,m)=>s+measureValues(m).run,0),total=m2*num($('priceM2').value)+run*num($('priceRun').value),due=num($('dueUSD').value)>0?num($('dueUSD').value):total,paidUSD=paymentTotalUSD(),id=$('orderId').value||nextOrderId(),old=db.orders.find(x=>x.id===id);
+ const payments=clone(currentPayments),method=payments.length?([...new Set(payments.map(p=>p.currency))].length>1?'مختلط':payments[0].currency==='USD'?'نقداً/دولار':'نقداً/ليرة'):$('paymentMethod').value;
+ const o={id,date:$('date').value||today(),created:old?.created||Date.now(),customer,material,thickness:num($('thickness').value),status:$('status').value,priceM2:num($('priceM2').value),priceRun:num($('priceRun').value),rate,totalUSD:total,totalSYP:total*rate,dueUSD:due,paidAmount:paidUSD,paidCurrency:payments.length?payments[payments.length-1].currency:$('paidCurrency').value,paidUSD,remainUSD:Math.max(0,due-paidUSD),remainSYP:Math.max(0,due-paidUSD)*rate,paymentMethod:method,payments,notes:$('notes').value,measures:clone(measures)};
+ const ix=db.orders.findIndex(x=>x.id===id);if(ix>=0)db.orders[ix]=o;else db.orders.push(o);saveDB();alert('تم حفظ الطلب رقم '+id+' بنجاح.');showPage('archive')
+}
+function editOrder(id){const o=db.orders.find(x=>x.id===id);if(!o)return;$('orderId').value=o.id;$('customer').value=o.customer;$('material').value=o.material;$('thickness').value=o.thickness||'';$('status').value=o.status;$('priceM2').value=o.priceM2||'';$('priceRun').value=o.priceRun||'';$('rate').value=o.rate||'';$('date').value=o.date;$('notes').value=o.notes||'';$('dueUSD').value=o.dueUSD||'';$('paidAmount').value='';$('paidCurrency').value=o.paidCurrency||'USD';$('paymentMethod').value=o.paymentMethod||'نقداً';measures=clone(o.measures||[]);currentPayments=clone(o.payments||[]);window.currentPayments=currentPayments;renderMeasures();renderPayments();$('formTitle').textContent='تعديل الطلب #'+o.id;showPage('new');calc()}
+function deleteOrder(id){if(confirm('هل أنت متأكد من حذف الطلب؟')){db.orders=db.orders.filter(x=>x.id!==id);saveDB()}}
+function renderArchive(){const q=($('archiveSearch')?.value||'').toLowerCase().trim(),a=db.orders.filter(x=>(x.customer+' '+x.id+' '+x.material).toLowerCase().includes(q)).sort((a,b)=>b.created-a.created);$('archiveBody').innerHTML=a.map(x=>{const m2=x.measures.reduce((s,m)=>s+measureValues(m).m2,0),run=x.measures.reduce((s,m)=>s+measureValues(m).run,0);return `<tr><td>${esc(x.id)}</td><td>${esc(x.date)}</td><td>${esc(x.customer)}</td><td>${esc(x.material)}</td><td>${fmt(m2)}</td><td>${fmt(run)}</td><td>${fmt(x.totalUSD)}</td><td>${fmt(x.paidUSD)} $</td><td>${esc(x.status)}</td><td><button type="button" class="btn" onclick="editOrder('${esc(x.id)}')">تعديل</button> <button type="button" class="secondary" onclick="printCurrent('measure','${esc(x.id)}')">طباعة</button> <button type="button" class="danger" onclick="deleteOrder('${esc(x.id)}')">حذف</button></td></tr>`}).join('')||'<tr><td colspan="10" class="empty">لا توجد نتائج</td></tr>'}
+function renderReports(){$('reportOrder').innerHTML=db.orders.slice().sort((a,b)=>b.created-a.created).map(x=>`<option value="${esc(x.id)}">#${esc(x.id)} — ${esc(x.customer)} — ${esc(x.date)}</option>`).join('')||'<option value="">لا توجد طلبات</option>'}
+function moneyWords(n,c){let raw=num(n),whole=Math.floor(Math.abs(raw)),minor=Math.round((Math.abs(raw)-whole)*100);if(whole===0)return 'صفر '+c;const ones=['','واحد','اثنان','ثلاثة','أربعة','خمسة','ستة','سبعة','ثمانية','تسعة','عشرة','أحد عشر','اثنا عشر','ثلاثة عشر','أربعة عشر','خمسة عشر','ستة عشر','سبعة عشر','ثمانية عشر','تسعة عشر'],tens=['','','عشرون','ثلاثون','أربعون','خمسون','ستون','سبعون','ثمانون','تسعون'];const under100=x=>x<20?ones[x]:(ones[x%10]?ones[x%10]+' و'+tens[Math.floor(x/10)]:tens[Math.floor(x/10)]),under1000=x=>{const h=Math.floor(x/100),r=x%100,hs=['','مائة','مائتان','ثلاثمائة','أربعمائة','خمسمائة','ستمائة','سبعمائة','ثمانمائة','تسعمائة'];return (h?hs[h]:'')+(h&&r?' و':'')+(r?under100(r):'')};const groups=['','ألف','مليون','مليار','ترليون'],parts=[];let n2=whole,g=0;while(n2&&g<groups.length){const x=n2%1000;if(x)parts.unshift(under1000(x)+(g?' '+groups[g]:''));n2=Math.floor(n2/1000);g++}let out=parts.join(' و')+' '+c;if(minor&&c.includes('دولار'))out+=' و'+moneyWords(minor,'سنتاً');return out}
+function report(o,type){const m2=o.measures.reduce((s,m)=>s+measureValues(m).m2,0),run=o.measures.reduce((s,m)=>s+measureValues(m).run,0),logo=db.settings.logo?`<img src="${esc(db.settings.logo)}" style="width:70px;height:70px;object-fit:contain">`:'';const head=`<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #123b3a;padding-bottom:8px"><div>${logo}</div><div style="text-align:center;flex:1"><h2>${esc(db.settings.shopName)}</h2><h3>${type==='measure'?'تقرير القياسات والتفصيل':'تقرير الحسابات المالية'}</h3></div><div>رقم الطلب: <b>${esc(o.id)}</b><br>${esc(o.date)}</div></div>`,rows=o.measures.map((m,i)=>`<tr><td>${i+1}</td><td>${esc(m.length)}</td><td>${esc(m.width)}</td><td>${esc(m.qty)}</td><td>${fmt(measureValues(m).m2)}</td><td>${fmt(measureValues(m).run)}</td><td>${esc(m.note)}</td></tr>`).join(''),table=`<table><thead><tr><th>#</th><th>الطول سم</th><th>العرض سم</th><th>العدد</th><th>م²</th><th>م جر</th><th>ملاحظات</th></tr></thead><tbody>${rows}</tbody></table>`,common=`<p><b>الزبون:</b> ${esc(o.customer)} &nbsp; <b>المادة:</b> ${esc(o.material)} &nbsp; <b>السماكة:</b> ${fmt(o.thickness)||'-'} سم</p>`;
+ let body=type==='measure'?`${head}${common}${table}<p><b>ملاحظات القص والتفصيل:</b> ${esc(o.notes||'-')}</p><div class="totalbar"><span>إجمالي المساحة: ${fmt(m2)} م²</span><span>إجمالي المتر الجاري: ${fmt(run)} م جر</span></div>`:`${head}${common}${table}<div style="margin-top:7px;line-height:1.55"><b>سعر المتر المربع:</b> ${fmt(o.priceM2)} $<br><b>سعر المتر الجاري:</b> ${fmt(o.priceRun)} $<br><b>سعر الصرف:</b> ${fmt(o.rate)} ل.س / $<br><b>الإجمالي:</b> ${fmt(o.totalUSD)} $ = ${fmt(o.totalSYP)} ل.س<br><b>كتابة:</b> ${moneyWords(o.totalUSD,'دولار أمريكي')}<br><b>وبالليرة:</b> ${moneyWords(o.totalSYP,'ليرة سورية')}<br><b>المطلوب:</b> ${fmt(o.dueUSD)} $<br><b>إجمالي المسدّد:</b> ${fmt(o.paidUSD)} $<br><b>الدفعات:</b> ${(o.payments||[]).map(p=>fmt(p.amount)+' '+(p.currency==='USD'?'دولار':'ليرة')+' / '+esc(p.date)).join(' — ')||'لا توجد'}<br><b>الباقي:</b> ${fmt(o.remainUSD)} $ = ${fmt(o.remainSYP)} ل.س<br><b>طريقة الدفع:</b> ${esc(o.paymentMethod)}</div>`;
+ return `<div class="print-sheet"><div class="print-copy">${body}</div><div class="print-copy">${body}</div></div>`
+}
+function printSelected(type){const id=$('reportOrder').value;if(id)printCurrent(type,id);else alert('لا توجد طلبات محفوظة للطباعة.')}
+function printCurrent(type,id=$('orderId').value){const o=db.orders.find(x=>String(x.id)===String(id));if(!o){alert('اختر طلباً محفوظاً أولاً.');return}showPage('reports');$('printArea').innerHTML=report(o,type);document.querySelectorAll('.page').forEach(x=>x.classList.remove('printing'));$('reports').classList.add('printing');setTimeout(()=>window.print(),250);window.onafterprint=()=>{$('reports').classList.remove('printing')}}
+function saveRate(){const d=$('rateDate').value,v=num($('rateValue').value);if(!d||v<=0)return alert('أدخل التاريخ والسعر.');db.rates[d]=v;saveDB();if(d===today())$('rate').value=v;alert('تم حفظ سعر الصرف')}
+function renderRates(){$('ratesBody').innerHTML=Object.entries(db.rates).sort((a,b)=>b[0].localeCompare(a[0])).map(([d,v])=>`<tr><td>${esc(d)}</td><td>${fmt(v)}</td><td><button type="button" class="danger" onclick="deleteRate('${esc(d)}')">حذف</button></td></tr>`).join('')||'<tr><td colspan="3" class="empty">لا توجد أسعار</td></tr>'}
+function deleteRate(d){delete db.rates[d];saveDB()}
+function saveSettings(){db.settings.shopName=$('shopName').value.trim()||'معمل الرخام والغرانيت';saveDB();alert('تم حفظ الإعدادات')}
+function loadSettings(){$('shopName').value=db.settings.shopName;$('brandName').textContent=db.settings.shopName;$('logoPreview').src=db.settings.logo||''}
+$('logoInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{db.settings.logo=r.result;persistLocal();void writeIDB();loadSettings()};r.readAsDataURL(f)})
+function exportJSON(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='نسخة_احتياطية_الرخام_'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('importJSON').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result),n=normalizeDB(x);if(!Array.isArray(n.orders)||!n.rates||typeof n.rates!=='object')throw new Error('invalid');db=n;saveDB();loadSettings();alert('تم الاستيراد بنجاح')}catch(err){console.error(err);alert('ملف النسخة الاحتياطية غير صالح')}};r.readAsText(f);e.target.value=''})
+function clearAll(){if(confirm('تحذير: سيتم حذف جميع البيانات نهائياً. هل أنت متأكد؟')&&prompt('اكتب حذف للتأكيد')==='حذف'){db={...defaultDB(),settings:db.settings};saveDB();resetForm();alert('تم حذف البيانات')}
+}
+async function init(){await loadPersistentDB();updateDashboard();loadSettings();$('date').value=today();$('rate').value=db.rates[today()]||'';$('rateDate').value=today();$('rateValue').value=db.rates[today()]||'';addMeasure();renderRates();renderReports();calc()}
+init();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(e=>console.warn('SW',e));
+function netStatus(){const e=$('netStatus');if(e)e.textContent=navigator.onLine?'● متصل — البيانات محفوظة على الجهاز':'● دون إنترنت — يعمل محلياً'}
+addEventListener('online',netStatus);addEventListener('offline',netStatus);netStatus();
+function u8(s){return new TextEncoder().encode(String(s))}
+function crc32(a){let c=~0;for(const n of a){c^=n;for(let k=0;k<8;k++)c=(c>>>1)^((c&1)?0xEDB88320:0)}return (~c)>>>0}
+function zipStore(files){let chunks=[],central=[],off=0;for(const f of files){const name=u8(f.name),data=u8(f.data),crc=crc32(data),h=new Uint8Array(30+name.length),v=new DataView(h.buffer);v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint16(6,0,true);v.setUint16(8,0,true);v.setUint16(10,0,true);v.setUint16(12,0,true);v.setUint32(14,crc,true);v.setUint32(18,data.length,true);v.setUint32(22,data.length,true);v.setUint16(26,name.length,true);h.set(name,30);chunks.push(h,data);const ch=new Uint8Array(46+name.length),d=new DataView(ch.buffer);d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);d.setUint16(6,20,true);d.setUint16(8,0,true);d.setUint16(10,0,true);d.setUint16(12,0,true);d.setUint16(14,0,true);d.setUint32(16,crc,true);d.setUint32(20,data.length,true);d.setUint32(24,data.length,true);d.setUint16(28,name.length,true);d.setUint32(42,off,true);ch.set(name,46);central.push(ch);off+=h.length+data.length}const cd=central.reduce((a,b)=>a+b.length,0),end=new Uint8Array(22),dv=new DataView(end.buffer);dv.setUint32(0,0x06054b50,true);dv.setUint16(8,files.length,true);dv.setUint16(10,files.length,true);dv.setUint32(12,cd,true);dv.setUint32(16,off,true);return new Blob([...chunks,...central,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+function xmlEsc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')}
+function colName(n){let c='';while(n){const x=(n-1)%26;c=String.fromCharCode(65+x)+c;n=Math.floor((n-1)/26)}return c}
+function sheetXml(rows){let out='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView rightToLeft="1" workbookViewId="0"/></sheetViews><sheetFormatPr defaultRowHeight="20"/><sheetData>';rows.forEach((r,ri)=>{out+='<row r="'+(ri+1)+'">';r.forEach((v,ci)=>{const cell=colName(ci+1)+(ri+1);if(typeof v==='number'&&Number.isFinite(v))out+='<c r="'+cell+'" t="n"><v>'+v+'</v></c>';else out+='<c r="'+cell+'" t="inlineStr"><is><t xml:space="preserve">'+xmlEsc(v)+'</t></is></c>'});out+='</row>'});return out+'</sheetData></worksheet>'}
+function exportXLSX(){
+ const rows=[['رقم الطلب','التاريخ','الزبون','المادة','السماكة سم','الطول سم','العرض سم','العدد','المساحة م²','المتر الجاري','سعر م² $','سعر م جر $','سعر الصرف','الإجمالي $','الإجمالي ل.س','المطلوب $','المسدّد $','الباقي $','الباقي ل.س','طريقة الدفع','الحالة','ملاحظات']];
+ const payRows=[['رقم الطلب','التاريخ','الزبون','المبلغ','العملة','سعر الصرف','المعادل بالدولار']];
+ db.orders.forEach(o=>{o.measures.forEach(m=>rows.push([o.id,o.date,o.customer,o.material,o.thickness,num(m.length),num(m.width),num(m.qty),measureValues(m).m2,measureValues(m).run,o.priceM2,o.priceRun,o.rate,o.totalUSD,o.totalSYP,o.dueUSD,o.paidUSD,o.remainUSD,o.remainSYP,o.paymentMethod,o.status,m.note]));(o.payments||[]).forEach(p=>payRows.push([o.id,p.date,o.customer,p.amount,p.currency==='USD'?'دولار':'ليرة سورية',p.rate,p.currency==='USD'?p.amount:(p.rate?p.amount/p.rate:0)]))});
+ const summary=[['حاسبة الرخام والغرانيت — تقرير مختصر'],['عدد الطلبات',db.orders.length],['إجمالي المبيعات $',db.orders.reduce((s,o)=>s+num(o.totalUSD),0)],['إجمالي الديون $',db.orders.reduce((s,o)=>s+num(o.remainUSD),0)],['تاريخ التصدير',today()]];
+ const files=[
+ {name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet3.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'},
+ {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+ {name:'xl/workbook.xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="الطلبات" sheetId="1" r:id="rId1"/><sheet name="الدفعات" sheetId="2" r:id="rId2"/><sheet name="الملخص" sheetId="3" r:id="rId3"/></sheets></workbook>'},
+ {name:'xl/_rels/workbook.xml.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet3.xml"/></Relationships>'},
+ {name:'xl/styles.xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Arial"/></font><font><b/><sz val="11"/><name val="Arial"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="solid"><fgColor rgb="E7F5F3"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/><xf numFmtId="0" fontId="1" fillId="1" borderId="0"/></cellXfs></styleSheet>'},
+ {name:'xl/worksheets/sheet1.xml',data:sheetXml(rows).replace('<row r="1">','<row r="1" s="1">')},
+ {name:'xl/worksheets/sheet2.xml',data:sheetXml(payRows).replace('<row r="1">','<row r="1" s="1">')},
+ {name:'xl/worksheets/sheet3.xml',data:sheetXml(summary)}
+ ];
+ const blob=zipStore(files),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='سجل_طلبات_الرخام_'+today()+'.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
+}
+</script>
+
+<script>
+(function(){
+const items=[
+ ['home','🏠','الرئيسية'],['new','➕','طلب جديد'],['archive','🗂️','الأرشيف'],['reports','🖨️','التقارير'],['settings','⚙️','الإعدادات']
+];
+const b=document.createElement('div');b.className='bottom-nav no-print';b.innerHTML=items.map(x=>`<button data-page="${x[0]}"><span class="ico">${x[1]}</span><span>${x[2]}</span></button>`).join('');
+document.body.appendChild(b);
+b.querySelectorAll('button').forEach(x=>x.onclick=()=>{showPage(x.dataset.page);syncNav(x.dataset.page)});
+const f=document.createElement('button');f.className='fab btn no-print';f.textContent='＋';f.title='طلب جديد';f.onclick=()=>newOrder();document.body.appendChild(f);
+window.syncNav=function(p){b.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));};
+const oldShow=window.showPage;
+window.showPage=function(p){oldShow(p);syncNav(p);window.scrollTo({top:0,behavior:'smooth'});}
+syncNav('home');
+})();
+</script>
+</body></html>
